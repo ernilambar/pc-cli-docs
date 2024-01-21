@@ -46,6 +46,10 @@ class PCCLIDocs {
 
 			$parser = new WP_CLI\DocParser( $reflection->getDocComment() );
 
+			$short_description = $parser->get_shortdesc();
+
+			$content .= "{$short_description} \n";
+
 			list ( $options, $examples ) = explode( '## EXAMPLES', $parser->get_longdesc() );
 
 			$content .= "## OPTIONS \n";
