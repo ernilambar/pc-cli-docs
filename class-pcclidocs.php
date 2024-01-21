@@ -48,15 +48,16 @@ class PCCLIDocs {
 
 			$short_description = $parser->get_shortdesc();
 
-			$content .= "{$short_description} \n";
+			$content .= "{$short_description}\n\n";
 
 			list ( $options, $examples ) = explode( '## EXAMPLES', $parser->get_longdesc() );
 
-			$content .= "## OPTIONS \n";
-			$content .= $this->get_wrapped( $options );
+			$content .= '## OPTIONS';
+			$options  = str_replace( '## OPTIONS', '', $options );
+			$content .= $this->get_wrapped( trim( $options ) );
 
-			$content .= "## EXAMPLES \n";
-			$content .= $this->get_wrapped( $examples );
+			$content .= '## EXAMPLES';
+			$content .= $this->get_wrapped( $this->get_clean_examples( $examples ) );
 
 			$content .= "\n";
 		}
@@ -72,7 +73,7 @@ class PCCLIDocs {
 	}
 
 	/**
-	 * Return content wrapped with Markdown code.
+	 * Returns content wrapped with Markdown code.
 	 *
 	 * @since 1.0.0
 	 *
@@ -80,6 +81,21 @@ class PCCLIDocs {
 	 * @return string Wrapped content.
 	 */
 	private function get_wrapped( $content ) {
-		return "\n```" . $content . "\n```\n";
+		return "\n```\n" . $content . "\n```\n";
+	}
+
+	/**
+	 * Returns cleaned examples.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $examples The content.
+	 * @return string Cleaned up examples.
+	 */
+	private function get_clean_examples( $examples ) {
+		$temp_examples = explode( "\n", $examples );
+		$temp_examples = array_filter( $temp_examples );
+		$temp_examples = array_map( 'trim', $temp_examples );
+		return implode( "\n", $temp_examples );
 	}
 }
