@@ -13,3 +13,8 @@
  *
  * @package pc-cli-docs
  */
+
+// Includes.
+require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+require_once plugin_dir_path( __FILE__ ) . 'class-pcclidocs.php';
+require_once plugin_dir_path( __FILE__ ) . 'command.php';

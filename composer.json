@@ -1,0 +1,19 @@
+{
+  "require": {
+    "wp-cli/wp-cli": "^2.9"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1",
+    "wp-coding-standards/wpcs": "^3"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "lint": "@php ./vendor/bin/phpcs --report-full --report-summary .",
+    "lint:fix": "@php ./vendor/bin/phpcbf --report-full --report-summary ."
+  }
+}
