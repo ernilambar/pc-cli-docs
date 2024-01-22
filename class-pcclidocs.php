@@ -32,9 +32,17 @@ class PCCLIDocs {
 	 * @since 1.0.0
 	 */
 	public function __invoke() {
+		// Bail if Plugin Check is not active.
+		if ( ! defined( 'WP_PLUGIN_CHECK_PLUGIN_DIR_PATH' ) ) {
+			WP_CLI::error( 'Plugin Check is not active.' );
+			return;
+		}
+
 		$commands = array( 'check', 'list-checks', 'list-check-categories' );
 
 		$content = '';
+
+		$content .= "[Back to overview](./README.md)\n\n";
 
 		foreach ( $commands as $command ) {
 			$method = str_replace( '-', '_', $command );
@@ -50,14 +58,28 @@ class PCCLIDocs {
 
 			$content .= "{$short_description}\n\n";
 
-			list ( $options, $examples ) = explode( '## EXAMPLES', $parser->get_longdesc() );
+			$options  = '';
+			$examples = '';
 
-			$content .= '## OPTIONS';
-			$options  = str_replace( '## OPTIONS', '', $options );
-			$content .= $this->get_wrapped( trim( $options ) );
+			$exploded = explode( '## EXAMPLES', $parser->get_longdesc() );
 
-			$content .= '## EXAMPLES';
-			$content .= $this->get_wrapped( $this->get_clean_examples( $examples ) );
+			if ( 1 === count( $exploded ) ) {
+				$options = reset( $exploded );
+			} elseif ( 2 === count( $exploded ) ) {
+				$options  = $exploded[0];
+				$examples = $exploded[1];
+			}
+
+			if ( ! empty( $options ) ) {
+				$content .= '## OPTIONS';
+				$options  = str_replace( '## OPTIONS', '', $options );
+				$content .= $this->get_wrapped( trim( $options ) );
+			}
+
+			if ( ! empty( $examples ) ) {
+				$content .= '## EXAMPLES';
+				$content .= $this->get_wrapped( $this->get_clean_examples( $examples ) );
+			}
 
 			$content .= "\n";
 		}
