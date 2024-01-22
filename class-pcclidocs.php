@@ -86,7 +86,7 @@ class PCCLIDocs {
 
 		if ( ! empty( $content ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-			file_put_contents( WP_PLUGIN_CHECK_PLUGIN_DIR_PATH . $this->dir . $this->file, $content );
+			file_put_contents( WP_PLUGIN_CHECK_PLUGIN_DIR_PATH . $this->dir . $this->file, trim( $content ) );
 			WP_CLI::success( 'Docs generated successfully.' );
 			return;
 		}
