@@ -49,7 +49,7 @@ class PCCLIDocs {
 
 			$reflection = new ReflectionMethod( 'WordPress\Plugin_Check\CLI\Plugin_Check_Command', $method );
 
-			$content .= "# wp plugin {$command} \n";
+			$content .= "# wp plugin {$command}\n";
 			$content .= "\n";
 
 			$parser = new WP_CLI\DocParser( $reflection->getDocComment() );
