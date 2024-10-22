@@ -1,9 +1,17 @@
 # PC CLI Docs
 
-Helper plugin addon to generate CLI docs for **Plugin Check**
+Helper plugin to generate docs for **Plugin Check**
 
-## Usage
+## Commands
+
+### CLI.md
 
 ```bash
-npm run wp-env run cli wp pc-cli-docs
+npm run wp-env run cli wp pcp cli-docs
+```
+
+### checks.md
+
+```bash
+npm run wp-env run cli wp pcp checks-docs
 ```

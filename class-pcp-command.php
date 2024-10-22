@@ -8,7 +8,7 @@
 /**
  * CLI class.
  */
-class PCCLIDocs {
+class PCP_Command {
 
 	/**
 	 * Target directory.
@@ -19,19 +19,76 @@ class PCCLIDocs {
 	private $dir = 'docs/';
 
 	/**
-	 * Target file name.
+	 * Generate checks docs.
 	 *
 	 * @since 1.0.0
-	 * @var string
+	 *
+	 * @subcommand checks-docs
 	 */
-	private $file = 'CLI.md';
+	public function checks_docs() {
+		// Bail if Plugin Check is not active.
+		if ( ! defined( 'WP_PLUGIN_CHECK_PLUGIN_DIR_PATH' ) ) {
+			WP_CLI::error( 'Plugin Check is not active.' );
+			return;
+		}
+
+		$content = '';
+
+		$content .= "[Back to overview](./README.md)\n\n";
+
+		$content .= "# Available Checks\n\n";
+
+		$result = WP_CLI::runcommand(
+			'plugin list-checks --format=json',
+			array(
+				'return'     => true,
+				'parse'      => 'json',
+				'launch'     => true,
+				'exit_error' => false,
+			)
+		);
+
+		// Error occurred.
+		if ( empty( $result ) || ! is_array( $result ) ) {
+			WP_CLI::line( $result );
+			WP_CLI::halt( 1 );
+		}
+
+		$content .= '| Check | Category | Description | Documentation |';
+		$content .= "\n";
+		$content .= '| --- | --- | --- | --- |';
+
+		foreach ( $result as $check ) {
+			$content .= "\n";
+			$content .= '| ' . $check['slug'] . ' | ' . $check['category'] . ' | ' . $check['description'] . ' | ';
+
+			$link = ' ';
+
+			if ( ! empty( $check['url'] ) ) {
+				$link = '[Learn more](' . $check['url'] . ')';
+			}
+
+			$content .= $link . ' |';
+		}
+
+		if ( ! empty( $content ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+			file_put_contents( WP_PLUGIN_CHECK_PLUGIN_DIR_PATH . $this->dir . 'checks.md', trim( $content ) );
+			WP_CLI::success( 'Checks file generated successfully.' );
+			return;
+		}
+
+		WP_CLI::error( 'Error generating checks file.' );
+	}
 
 	/**
-	 * Generate docs.
+	 * Generate CLI docs.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @subcommand cli-docs
 	 */
-	public function __invoke() {
+	public function cli_docs() {
 		// Bail if Plugin Check is not active.
 		if ( ! defined( 'WP_PLUGIN_CHECK_PLUGIN_DIR_PATH' ) ) {
 			WP_CLI::error( 'Plugin Check is not active.' );
@@ -86,7 +143,7 @@ class PCCLIDocs {
 
 		if ( ! empty( $content ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-			file_put_contents( WP_PLUGIN_CHECK_PLUGIN_DIR_PATH . $this->dir . $this->file, trim( $content ) );
+			file_put_contents( WP_PLUGIN_CHECK_PLUGIN_DIR_PATH . $this->dir . 'CLI.md', trim( $content ) );
 			WP_CLI::success( 'Docs generated successfully.' );
 			return;
 		}
