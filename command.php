@@ -5,6 +5,6 @@
  * @package pc-cli-docs
  */
 
-$command = new PCCLIDocs();
+$command = new PCP_Command();
 
-WP_CLI::add_command( 'pc-cli-docs', $command );
+WP_CLI::add_command( 'pcp', $command );

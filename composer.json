@@ -1,10 +1,10 @@
 {
   "require": {
-    "wp-cli/wp-cli": "^2.9"
+    "wp-cli/wp-cli": "^2.11"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^1",
-    "wp-coding-standards/wpcs": "^3"
+    "wp-coding-standards/wpcs": "^3.1"
   },
   "config": {
     "allow-plugins": {
@@ -13,7 +13,7 @@
     "sort-packages": true
   },
   "scripts": {
-    "lint": "@php ./vendor/bin/phpcs --report-full --report-summary .",
-    "lint:fix": "@php ./vendor/bin/phpcbf --report-full --report-summary ."
+    "lint": "@php ./vendor/bin/phpcs --report-full --report-summary",
+    "format": "@php ./vendor/bin/phpcbf --report-full --report-summary"
   }
 }
